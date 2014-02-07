@@ -9,12 +9,12 @@
 <body>
     <div class="w-header">
         <div class="background" style="background-image:url(http://img.wdjimg.com/mms/icon/v1/e/49/b91822e4adc0540a15b321ed7587d49e.png)"></div>
-        <div class="title">微信的应用故事</div>
+        <div class="title">微信的成长故事</div>
     </div>
     <div class="w-container">
         <div class="w-content">
             <div class="cross">
-                <div class="column launch-card">
+                <!-- <div class="column launch-card">
                     <div class="post">
                         <div class="signature"></div>
                         <div class="title">正式上线</div>
@@ -136,14 +136,163 @@
                             <p>好评率 <span class="better">89%</span></p>
                         </div>
                     </div>
-                </div>
+                </div> -->
             </div>
         </div>
     </div>
     <div class="w-footer">
         <div class="background" style="background-image:url(http://img.wdjimg.com/mms/icon/v1/e/49/b91822e4adc0540a15b321ed7587d49e.png)"></div>
-        <div class="content"></div>
+        <div class="logo"></div>
+        <div class="related">微信、知乎日报、社交网络、新闻资讯</div>
     </div>
+
+    <script type="text/template" id="a-template-launch">
+        <div class="column launch-card">
+            <div class="post">
+                <div class="signature"></div>
+                <div class="title">正式上线</div>
+                <div class="date"><%= FormatDate('yyyy 年 MM 月 dd 日', date) %></div>
+            </div>
+        </div>
+        <div class="column launch-data">
+            <div class="post">
+                <div class="icon"><img src="<%= icon.newData %>"></div>
+                <div class="name"><%= title.newData %></div>
+                <div class="desc">
+                    <p><span class="better"><%= versionName.newData %></span> 版在豌豆荚正式上线</p>
+                    <% if (downloadCount.newData > 0) { %>
+                    <p>当日下载量：<span class="worse"><%= downloadCount.newData %></span></p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+        <% if (screenshots.length > 1) { %>
+        <div class="column launch-screenshot portrait">
+            <div class="post">
+                <div class="screenshot screenshot-alpha" style="background-image: url(<%= screenshots[0] %>)"></div>
+                <div class="screenshot screenshot-beta" style="background-image: url(<%= screenshots[1] %>)"></div>
+            </div>
+        </div>
+        <% } %>
+    </script>
+
+    <script type="text/template" id="a-template-update">
+        <div class="column update-card">
+            <div class="post">
+                <div class="signature"></div>
+                <div class="title">更新至 <%= versionName.newData %></div>
+                <div class="date"><%= FormatDate('yyyy 年 MM 月 dd 日', date) %></div>
+            </div>
+        </div>
+        <% if (title.changed) { %>
+        <div class="column update-name">
+            <div class="post">
+                <div class="signature"></div>
+                <div class="title">改了新名字</div>
+                <div class="desc"><%= title.oldData %> → <%= title.newData %></div>
+            </div>
+        </div>
+        <% } %>
+        <% if (icon.changed) { %>
+        <div class="column update-icon">
+            <div class="post">
+                <div class="signature"></div>
+                <div class="title">换了新图标</div>
+                <div class="desc">
+                    <img src="<%= icon.oldData %>"> → <img src="<%= icon.newData %>">
+                </div>
+            </div>
+        </div>
+        <% } %>
+        <% if (changeLog.changed) { %>
+        <div class="column update-changelog">
+            <div class="post">
+                <div class="title">更新内容</div>
+                <div class="desc">
+                    <%= changeLog.newData %>
+                </div>
+            </div>
+        </div>
+        <% } %>
+        <% if (screenshots.length > 1) { %>
+        <div class="column update-screenshot portrait">
+            <div class="post">
+                <div class="screenshot screenshot-alpha" style="background-image: url(<%= screenshots[0] %>)"></div>
+                <div class="screenshot screenshot-beta" style="background-image: url(<%= screenshots[1] %>)"></div>
+            </div>
+        </div>
+        <% } %>
+        <% if (0) { %>
+        <div class="column update-effect update-effect-better">
+            <div class="post">
+                <div class="signature"></div>
+                <div class="desc">
+                    <p>下载量提升了 <span class="better">55%</span>，获得了 <span class="better">47</span> 个好评</p>
+                    <p>看来改版不错哟！</p>
+                </div>
+            </div>
+        </div>
+        <div class="column update-effect update-effect-worse">
+            <div class="post">
+                <div class="signature"></div>
+                <div class="desc">
+                    <p>下载量下降了 <span class="worse">55%</span>，获得了 <span class="worse">47</span> 个差评</p>
+                    <p>看来改版堪忧呀！</p>
+                </div>
+            </div>
+        </div>
+        <% } %>
+    </script>
+
+    <script type="text/template" id="a-template-install">
+        <div class="column install-card">
+            <div class="post">
+                <div class="signature"></div>
+                <div class="title"><%= downloadMagnitude %>下载达成</div>
+                <div class="desc">
+                    <canvas class="install-chart install-chart-<%= date %>" width="600" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="a-template-award">
+        <div class="column award-card">
+            <div class="post">
+                <div class="signature"></div>
+                <div class="title">荣获豌豆荚设计奖</div>
+                <div class="date"><%= FormatDate('yyyy 年 MM 月 dd 日', date) %></div>
+                <div class="desc">
+                    <%= awardContent %>
+                    <p><a href="<%= awardUrl %>" target="_default">继续阅读…</a></p>
+                </div>
+            </div>
+        </div>
+    </script>
+
+    <script type="text/template" id="a-template-summary">
+        <div class="column summary-card">
+            <div class="post">
+                <div class="signature"></div>
+                <div class="title">直到今天</div>
+                <div class="date"><%= FormatDate('yyyy 年 MM 月 dd 日') %></div>
+                <div class="desc">
+                    <p><%= finalVersion.title.newData %>，已经上线了 <span class="better"><%= appSummary.duration %></span> 天</p>
+                    <% if (finalVersion.size.newData > appMilestoneList[0].size.newData) { %>
+                    <p>从原来的 <span class="better"><%= ReadableSize(appMilestoneList[0].size.newData) %></span> 涨到了现在的 <span class="worse"><%= ReadableSize(finalVersion.size.newData) %></span></p>
+                    <% } else { %>
+                    <p>从原来的 <span class="worse"><%= ReadableSize(appMilestoneList[0].size.newData) %></span> 降到了现在的 <span class="better"><%= ReadableSize(finalVersion.size.newData) %></span></p>
+                    <% } %>
+                    <p>平均每 <span class="better"><%= appSummary.updateFrequence %></span> 天更新一次</p>
+                    <p>历经 <span class="better"><%= appSummary.versionCount %></span> 个版本</p>
+                    <% if (0) { %>
+                    <p>共计获得 <span class="better">182</span> 个好评</p>
+                    <p>好评率 <span class="better">89%</span></p>
+                    <% } %>
+                </div>
+            </div>
+        </div>
+    </script>
 
     <script src="components/underscore/underscore.js"></script>
     <script src="components/jquery/jquery.js"></script>
