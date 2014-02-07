@@ -1,0 +1,271 @@
+@import "compass/css3";
+@import "sprites/*.png";
+
+.w-header,
+.w-footer {
+    overflow: hidden;
+
+    .background {
+        background-color: transparent;
+        background-size: cover;
+        bottom: 0;
+        left: 0;
+        pointer-events: none;
+        position: absolute;
+        right: 0;
+        top: 0;
+        transform: translate3d(0, 0, 0);
+        -webkit-filter: blur(20px);
+        -webkit-transform: scale(1.2, 1.2);
+    }
+}
+
+.w-header {
+    border: 1px solid #e7e7e7;
+    border-width: 0 0 1px 0;
+    box-sizing: border-box;
+    height: 80px;
+    left: 0;
+    padding: 15px 25px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+
+    .background {
+        background-position: center 20%;
+    }
+
+    .title {
+        position: absolute;
+        top: 10px;
+        left: 0;
+        background-color: rgba(0, 0, 0, .6);
+        color: #fff;
+        padding: 10px 20px 10px 20px;
+        font-size: 18px;
+        z-index: 10;
+    }
+}
+
+.w-footer {
+    border: 1px solid #e7e7e7;
+    border-width: 1px 0 0 0;
+    bottom: 0;
+    height: 40px;
+    left: 0;
+    width: 100%;
+    position: fixed;
+
+    .background {
+        background-position: center 80%;
+    }
+
+    .content {
+        position: absolute;
+        top: 4px;
+        left: 8px;
+        @include sprites-sprite(logo);
+        display: inline-block;
+        height: sprites-sprite-height(logo);
+        width: sprites-sprite-width(logo);
+        z-index: 10;
+        -webkit-filter: drop-shadow(1px 1px 1px rgba(0, 0, 0, .6));
+    }
+}
+
+.w-container {
+    bottom: 40px;
+    left: 0;
+    position: absolute;
+    top: 80px;
+}
+
+.w-content {
+    display: table;
+    height: 100%;
+
+    .cross{
+        display: table-row;
+    }
+
+    .column {
+        border-right: 1px solid #e5e5e5;
+        display: table-cell;
+        vertical-align: middle;
+
+        &:last-child {
+            border-right: 0;
+        }
+    }
+
+    .post {
+        box-sizing: border-box;
+        color: #5c5c5c;
+        padding: 8px;
+        text-align: center;
+        width: 372px;
+
+        .signature,
+        .title,
+        .date,
+        .desc,
+        .icon,
+        .name {
+            margin-bottom: 20px;
+        }
+
+        .title {
+            color: #3baa24;
+            font-size: 48px;
+        }
+
+        .date {
+            color: #808080;
+            font-size: 14px;
+        }
+
+        .desc {
+            font-size: 14px;
+
+            .better {
+                color: #3baa24;
+            }
+
+            .worse {
+                color: #b30000;
+            }
+        }
+    }
+
+    @each $name in award-card, install-card, launch-card, summary-card, update-card, update-effect-better, update-effect-worse, update-icon, update-name {
+        .#{$name} {
+            .signature {
+                @include sprites-sprite(#{$name});
+                display: inline-block;
+                height: sprites-sprite-height(#{$name});
+                text-align: center;
+                width: sprites-sprite-width(#{$name});
+            }
+        }
+    }
+
+    .launch-data {
+        .icon {
+            img {
+                width: 128px;
+                height: 128px;
+            }
+        }
+
+        .name {
+            font-size: 30px;
+        }
+
+        .desc {
+            font-size: 18px;
+        }
+    }
+
+    .launch-screenshot,
+    .update-screenshot,
+    .install-card,
+    .award-card {
+        .post {
+            width: 744px;
+        }
+    }
+
+    .update-name,
+    .update-icon,
+    .update-changelog {
+        .title {
+            font-size: 30px;
+        }
+    }
+
+    .update-name,
+    .update-icon {
+        .desc {
+            font-size: 26px;
+        }
+    }
+
+    .update-icon {
+        .desc {
+            img {
+                width: 85px;
+                vertical-align: middle;
+            }
+        }
+    }
+
+    .update-changelog {
+        .desc {
+            text-align: left;
+        }
+    }
+
+    .launch-screenshot,
+    .update-screenshot {
+        .post {
+            height: 100%;
+            max-height: 616px;
+            position: relative;
+        }
+
+        .screenshot {
+            background-size: cover;
+            background-position: center center;
+            position: absolute;
+        }
+
+        &.portrait {
+            .screenshot-alpha,
+            .screenshot-beta {
+                bottom: 8px;
+                top: 8px;
+                width: 360px;
+            }
+
+            .screenshot-alpha {
+                left: 8px;
+            }
+
+            .screenshot-beta {
+                left: 376px;
+            }
+        }
+
+        &.landscape {
+            .screenshot-alpha,
+            .screenshot-beta {
+                right: 8px;
+                left: 8px;
+            }
+
+            .screenshot-alpha {
+                top: 8px;
+                bottom: 50%;
+                margin-bottom: 4px;
+            }
+
+            .screenshot-beta {
+                top: 50%;
+                bottom: 8px;
+                margin-top: 4px;
+            }
+        }
+    }
+
+    .award-card {
+        .post {
+            padding-left: 50px;
+            padding-right: 50px;
+        }
+
+        .desc {
+            text-align: left;
+        }
+    }
+
+}

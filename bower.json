@@ -1,0 +1,12 @@
+{
+  "name": "Time-Machine",
+  "version": "0.0.1",
+  "devDependencies": {},
+  "dependencies": {
+    "jquery": "~2.1",
+    "normalize-css": "~3.0.0",
+    "scroll-converter": "koggdal/scroll-converter",
+    "underscore": "~1.5.2",
+    "Chart.js": "*"
+  }
+}
