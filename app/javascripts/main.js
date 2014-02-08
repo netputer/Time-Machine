@@ -115,7 +115,10 @@ $(function () {
         url = host + '/category/time_machine?category=' + queryCategory;
     } else {
         url = host + '/apps/time_machine?packageName=' + queryPackageName;
-        // $.ajax({url : host + '/apps/repairTime?packageName=' + queryPackageName});
+
+        if (getQueryString('repair') === '1') {
+            $.ajax({url : host + '/apps/repairTime?packageName=' + queryPackageName});
+        }
     }
 
     $('.w-landing .action a').on('click', function (e) {
