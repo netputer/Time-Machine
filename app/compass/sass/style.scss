@@ -125,6 +125,7 @@
         img {
             width: 86px;
             vertical-align: middle;
+            margin-left: -61px;
         }
     }
 
@@ -179,7 +180,7 @@
     .post {
         box-sizing: border-box;
         color: #5c5c5c;
-        padding: 8px;
+        padding: 8px 20px;
         text-align: center;
         width: 372px;
 
@@ -192,9 +193,42 @@
             margin-bottom: 20px;
         }
 
+        .icon,
+        .icon-small {
+            .name {
+                margin-top: 10px;
+                display: block;
+            }
+        }
+
+        .icon {
+            img {
+                width: 128px;
+                height: 128px;
+            }
+        }
+
+        .icon-small {
+            margin-top: 40px;
+
+            img {
+                width: 68px;
+                height: 68px;
+            }
+        }
+
         .title {
             color: #3baa24;
             font-size: 48px;
+
+            .highlight {
+                font-size: 36px;
+                margin-bottom: 10px;
+
+                strong {
+                    font-size: 128px;
+                }
+            }
         }
 
         .date {
@@ -232,13 +266,6 @@
     }
 
     .launch-data {
-        .icon {
-            img {
-                width: 128px;
-                height: 128px;
-            }
-        }
-
         .name {
             font-size: 30px;
         }
@@ -252,7 +279,8 @@
     .update-screenshot,
     .install-card,
     .award-card,
-    .summary-card {
+    .summary-card,
+    .category-card {
         .post {
             width: 744px;
         }
@@ -353,4 +381,39 @@
         }
     }
 
+    .category-card {
+        li {
+            display: inline-block;
+            margin: 0 10px;
+            width: 68px;
+        }
+
+        .icon-small {
+            margin-top: 80px;
+
+            img {
+                width: 68px;
+            }
+
+            .name {
+                display: block;
+                margin-top: 10px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                word-wrap: break-word;
+            }
+        }
+    }
+}
+
+.w-app {
+    .launch-card,
+    .update-card,
+    .install-card,
+    .award-card {
+        .highlight {
+            display: none;
+        }
+    }
 }

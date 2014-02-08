@@ -1,6 +1,4 @@
-/* global $, _, console */
-
-'use strict';
+/* global window, $, _, console */
 
 var FormatDate = function (format, date) {
     date = date ? new Date(parseInt(date, 10)) : new Date();
@@ -109,21 +107,29 @@ $(function () {
     var queryPackageName = getQueryString('packageName');
     var queryCategory = getQueryString('category');
 
+    // var host = 'http://192.168.111.191:8080';
+    var host = 'http://192.168.111.218:8080';
     var url;
 
     if (!!queryCategory) {
-        url = 'http://192.168.111.218:8080/apps/time_machine?category=' + queryCategory;
+        url = host + '/category/time_machine?category=' + queryCategory;
     } else {
-        url = 'http://192.168.111.218:8080/apps/time_machine?packageName=' + queryPackageName;
-        // $.ajax({url : 'http://192.168.111.218:8080/apps/repairTime?packageName=' + queryPackageName});
+        url = host + '/apps/time_machine?packageName=' + queryPackageName;
+        // $.ajax({url : host + '/apps/repairTime?packageName=' + queryPackageName});
     }
 
     $('.w-landing .action a').on('click', function (e) {
-        // $('.w-landing').fadeOut();
         $('.w-landing').addClass('end').on('webkitTransitionEnd', function () {
             $(this).hide();
         });
     });
+
+
+
+    // $('.w-landing').hide();
+    // return;
+
+
 
     $.ajax({
         url : url,
@@ -131,19 +137,35 @@ $(function () {
     }).done(function (data) {
         $('.cross').html('');
 
-        if (queryPackageName) {
-            document.title = data.finalVersion.title.newData + '的时光机';
-        }
-
-        // if (queryCategory) {
-        //     document.title = queryCategory + '的时光机';
-        // }
-
-        $('.w-landing img').attr('src', data.finalVersion.icon.newData);
         $('.w-landing .action a').text('开启时光机');
 
-        $('.js-title').text(data.finalVersion.title.newData);
-        $('.background').css('background-image', 'url(' + data.finalVersion.icon.newData + ')');
+        if (queryPackageName) {
+            document.title = data.finalVersion.title.newData + '的时光机';
+
+            $('body').addClass('w-app');
+            $('.w-landing img').attr('src', data.finalVersion.icon.newData);
+            $('.js-title').text(data.finalVersion.title.newData);
+            $('.background').css('background-image', 'url(' + data.finalVersion.icon.newData + ')');
+        }
+
+        if (queryCategory) {
+            document.title = queryCategory + '分类的时光机';
+
+            var categoryIcons = [];
+
+            _.each(data.finalVersions, function (app) {
+                categoryIcons.push($('<img>').attr('src', app.icon.newData));
+            });
+
+            $('body').addClass('w-category');
+            $('.w-landing .icons').html(categoryIcons);
+
+            $('.w-landing .desc').text('了解「' + queryCategory + '」分类中的应用们，鲜为人知的成长故事');
+            $('.js-title').text(queryCategory + '分类');
+            $('.background').css('background-image', 'url(' + data.finalVersions[0].icon.newData + ')');
+
+            $('.cross').append(_.template($('#a-template-category').html(), data));
+        }
 
         _.each(data.appMilestoneList, function (milestone) {
             switch (milestone.type) {
@@ -196,7 +218,17 @@ $(function () {
             }
         });
 
-        $('.cross').append(_.template($('#a-template-summary').html(), data));
+        if (data.appSummary) {
+            $('.cross').append(_.template($('#a-template-summary').html(), data));
+        }
+
+        if (data.oldestApp) {
+            $('.cross').append(_.template($('#a-template-oldest').html(), data.oldestApp));
+        }
+
+        if (data.controversialApp) {
+            $('.cross').append(_.template($('#a-template-controversial').html(), data));
+        }
     });
 
     // $('.w-landing').hide();
