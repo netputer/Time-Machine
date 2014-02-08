@@ -136,7 +136,9 @@ $(function () {
 
     $.ajax({
         url : url,
-        dataType : 'json'
+        dataType : 'json',
+        crossDomain : true,
+        timeout : 30000
     }).done(function (data) {
         $('.cross').html('');
 
@@ -157,7 +159,9 @@ $(function () {
             var categoryIcons = [];
 
             _.each(data.finalVersions, function (app) {
-                categoryIcons.push($('<img>').attr('src', app.icon.newData));
+                if (app && app.icon) {
+                    categoryIcons.push($('<img>').attr('src', app.icon.newData));
+                }
             });
 
             $('body').addClass('w-category');

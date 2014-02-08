@@ -130,10 +130,19 @@
         font-size: 68px;
         margin-bottom: 40px;
 
-        img {
-            width: 86px;
-            vertical-align: middle;
-            margin-left: -61px;
+        .icons {
+            display: inline-block;
+
+            img {
+                width: 86px;
+                vertical-align: middle;
+
+                margin-right: -61px;
+
+                &:last-child {
+                    margin-right: 0;
+                }
+            }
         }
     }
 
