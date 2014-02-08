@@ -92,6 +92,65 @@
     }
 }
 
+.w-landing {
+    background-image: url(../images/cover.png);
+    background-size: cover;
+    bottom: 0;
+    color: #fff;
+    left: 0;
+    position: fixed;
+    right: 0;
+    text-align: center;
+    top: 0;
+    z-index: 100;
+
+    transition: all .5s ease-out;
+
+    &.end {
+        opacity: 0;
+        -webkit-transform: scale(1.5, 1.5);
+    }
+
+    .content {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -webkit-transform: translate(-50%, -50%);
+    }
+
+    .title {
+        font-size: 68px;
+        margin-bottom: 40px;
+
+        img {
+            width: 86px;
+            vertical-align: middle;
+        }
+    }
+
+    .desc {
+        margin-bottom: 60px;
+        font-size: 20px;
+    }
+
+    .action {
+        font-size: 28px;
+
+        a {
+            color: #fff;
+            text-decoration: none;
+            display: inline-block;
+            padding: 20px;
+            border-radius: 10px;
+            border: 1px solid #fff;
+
+            &:hover {
+                background-color: rgba(255, 255, 255, .1);
+            }
+        }
+    }
+}
+
 .w-container {
     bottom: 40px;
     left: 0;
@@ -192,7 +251,8 @@
     .launch-screenshot,
     .update-screenshot,
     .install-card,
-    .award-card {
+    .award-card,
+    .summary-card {
         .post {
             width: 744px;
         }
@@ -289,6 +349,7 @@
 
         .desc {
             text-align: left;
+            line-height: 24px;
         }
     }
 

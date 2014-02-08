@@ -1,5 +1,7 @@
 /* global $, _, console */
 
+'use strict';
+
 var FormatDate = function (format, date) {
     date = date ? new Date(parseInt(date, 10)) : new Date();
     var output = format;
@@ -90,77 +92,112 @@ var ReadableSize = function (bytes) {
     return result;
 };
 
-$(function () {
-    'use strict';
+var getQueryString = function (key, string) {
+    var QUERYSTRING_PATTERN_PREFIX = '[\\?\\&\\#]';
+    var QUERYSTRING_PATTERN_SUFFIX = '=([^&]*)';
 
+    string = string || window.location.search;
+    var matches = string.match(new RegExp(QUERYSTRING_PATTERN_PREFIX + key + QUERYSTRING_PATTERN_SUFFIX, 'i'));
+    var encodedValue = matches && matches[1];
+    var value = encodedValue && decodeURIComponent(encodedValue);
+    return value;
+};
+
+$(function () {
     window.scrollConverter.activate();
 
-    var query = location.hash.substr(1);
-    var isCategory = query.indexOf('.') < 0;
+    var queryPackageName = getQueryString('packageName');
+    var queryCategory = getQueryString('category');
+
     var url;
 
-    if (isCategory) {
-        url = 'http://192.168.111.218:8080/apps/time_machine?category=' + query;
+    if (!!queryCategory) {
+        url = 'http://192.168.111.218:8080/apps/time_machine?category=' + queryCategory;
     } else {
-        url = 'http://192.168.111.218:8080/apps/time_machine?packageName=' + query;
-
-        $.ajax({
-            url : 'http://192.168.111.218:8080/apps/repairTime?packageName=' + query
-        });
+        url = 'http://192.168.111.218:8080/apps/time_machine?packageName=' + queryPackageName;
+        // $.ajax({url : 'http://192.168.111.218:8080/apps/repairTime?packageName=' + queryPackageName});
     }
+
+    $('.w-landing .action a').on('click', function (e) {
+        // $('.w-landing').fadeOut();
+        $('.w-landing').addClass('end').on('webkitTransitionEnd', function () {
+            $(this).hide();
+        });
+    });
 
     $.ajax({
         url : url,
         dataType : 'json'
     }).done(function (data) {
-        console.error(data);
+        $('.cross').html('');
 
-        $('.w-header .title').text(data.finalVersion.title.newData + '的成长故事');
+        if (queryPackageName) {
+            document.title = data.finalVersion.title.newData + '的时光机';
+        }
+
+        // if (queryCategory) {
+        //     document.title = queryCategory + '的时光机';
+        // }
+
+        $('.w-landing img').attr('src', data.finalVersion.icon.newData);
+        $('.w-landing .action a').text('开启时光机');
+
+        $('.js-title').text(data.finalVersion.title.newData);
         $('.background').css('background-image', 'url(' + data.finalVersion.icon.newData + ')');
-
-        var cards = [];
 
         _.each(data.appMilestoneList, function (milestone) {
             switch (milestone.type) {
             case 'launch':
-                cards.push(_.template($('#a-template-launch').html(), milestone));
+                $('.cross').append(_.template($('#a-template-launch').html(), milestone));
                 break;
 
             case 'update':
-                cards.push(_.template($('#a-template-update').html(), milestone));
+                $('.cross').append(_.template($('#a-template-update').html(), milestone));
                 break;
 
             case 'install':
-                cards.push(_.template($('#a-template-install').html(), milestone));
+                $('.cross').append(_.template($('#a-template-install').html(), milestone));
+
+                var chartLabels = [];
+                var chartDataset = [];
+
+                var downloadHistoryList = _.last(milestone.downloadHistoryList, 5);
+
+                _.each(downloadHistoryList, function (everyday) {
+                    chartLabels.push(FormatDate('MM-dd', everyday.date));
+                    chartDataset.push(parseInt(everyday.downloads, 10));
+                });
+
+
+                var ctx = $('.install-chart-' + milestone.date)[0].getContext('2d');
+
+                var chartData = {
+                    labels : chartLabels,
+                    datasets : [{
+                        fillColor : 'rgba(59, 170, 36, 0.4)',
+                        strokeColor : '#3baa24',
+                        pointColor : '#3baa24',
+                        pointStrokeColor : '#fff',
+                        data : chartDataset
+                    }]
+                };
+
+                var chartOptions = {
+                    bezierCurve : false
+                };
+
+                new window.Chart(ctx).Line(chartData, chartOptions);
+
                 break;
 
             case 'award':
-                cards.push(_.template($('#a-template-award').html(), _.extend(milestone, data.appSelectedAward)));
+                $('.cross').append(_.template($('#a-template-award').html(), _.extend(milestone, data.appSelectedAward)));
                 break;
             }
         });
 
-        cards.push(_.template($('#a-template-summary').html(), data));
-
-        $('.cross').html(cards);
+        $('.cross').append(_.template($('#a-template-summary').html(), data));
     });
 
-    // var ctx = $('.install-chart')[0].getContext('2d');
-
-    // var data = {
-    //     labels : ['09-11', '09-12', '09-13', '09-14', '09-15', '09-16', '09-17'],
-    //     datasets : [{
-    //         fillColor : 'rgba(59, 170, 36, 0.4)',
-    //         strokeColor : '#3baa24',
-    //         pointColor : '#3baa24',
-    //         pointStrokeColor : '#fff',
-    //         data : [28,48,60,89,106,127,200]
-    //     }]
-    // };
-
-    // var options = {
-    //     bezierCurve : false
-    // };
-
-    // var installChart = new window.Chart(ctx).Line(data, options);
+    // $('.w-landing').hide();
 });
