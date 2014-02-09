@@ -127,17 +127,9 @@ $(function () {
         });
     });
 
-
-
-    // $('.w-landing').hide();
-    // return;
-
-
-
     $.ajax({
         url : url,
         dataType : 'json',
-        crossDomain : true,
         timeout : 30000
     }).done(function (data) {
         $('.cross').html('');
@@ -167,7 +159,7 @@ $(function () {
             $('body').addClass('w-category');
             $('.w-landing .icons').html(categoryIcons);
 
-            $('.w-landing .desc').text('了解「' + queryCategory + '」分类中的应用们，鲜为人知的成长故事');
+            $('.w-landing .desc').text('了解「' + queryCategory + '」分类的应用们，鲜为人知的成长故事');
             $('.js-title').text(queryCategory + '分类');
             $('.background').css('background-image', 'url(' + data.finalVersions[0].icon.newData + ')');
 
@@ -196,7 +188,6 @@ $(function () {
                     chartLabels.push(FormatDate('MM-dd', everyday.date));
                     chartDataset.push(parseInt(everyday.downloads, 10));
                 });
-
 
                 var ctx = $('.install-chart-' + milestone.date)[0].getContext('2d');
 
